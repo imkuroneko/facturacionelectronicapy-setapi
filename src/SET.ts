@@ -178,8 +178,6 @@ class SET {
           timeout: 90000,
         };
 
-        console.log("El config del params viene ", config);
-
         defaultConfig = Object.assign(defaultConfig, config);
 
         this.abrir(certificado, passphase);
@@ -262,7 +260,6 @@ class SET {
             }
           })
           .catch((err: any) => {
-            console.log("CAtch en error 1111", err);
             if (err && err.response && err.response.data) {
               var xmlResponse = err.response.data;
               var parser = new xml2js.Parser({ explicitArray: false });
@@ -280,7 +277,6 @@ class SET {
             }
           });
       } catch (error) {
-        console.log("CAtch en error 2222", error);
         reject(error);
       }
     });
