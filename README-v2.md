@@ -1,6 +1,10 @@
 # Facturación Electrónica - API SET v2
 
-Esta versión (v2) implementa el consumo de certificados utilizando archivos separados `.crt` (o `.pem`) y `.key`, reemplazando completamente el uso de archivos PFX/P12.
+Esta versión (v2) implementa el consumo de certificados utilizando archivos separados `.crt` (o `.pem`) y `.key`, reemplazando **completamente** el uso de archivos PFX/P12.
+
+## 🎯 Objetivo
+
+Simplificar el manejo de certificados digitales eliminando la necesidad de archivos PFX/P12 y sus contraseñas, utilizando en su lugar el formato estándar de la industria: archivos separados de certificado (.crt/.pem) y clave privada (.key).
 
 ## ⚠️ Cambios Importantes (Breaking Changes)
 
