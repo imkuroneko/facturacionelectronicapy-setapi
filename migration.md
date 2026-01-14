@@ -25,7 +25,7 @@ openFile(file: string, passphase: string) {
   // 2. Convierte a ASN.1
   this.p12Asn1 = forge.asn1.fromDer(pkcs12.toString("binary"));
   
-  // 3. Extrae usando la contraseña
+  // 3. Extrae usando la contraseña (passphase en el código original)
   this.p12 = forge.pkcs12.pkcs12FromAsn1(this.p12Asn1, false, passphase);
 }
 
@@ -45,6 +45,7 @@ getPrivateKey() {
 ### Uso en SET.ts
 
 ```typescript
+// Método actual en SET.ts
 abrir(certificado: any, passphase: string) {
   pkcs12.openFile(certificado, passphase);
   this.cert = pkcs12.getCertificate();  // Obtiene PEM del certificado
@@ -101,18 +102,18 @@ class CertificateManager {
    * Carga certificado y clave desde archivos separados
    * @param certPath - Ruta al archivo .crt
    * @param keyPath - Ruta al archivo .key
-   * @param keyPassphrase - Contraseña opcional si la clave privada está encriptada
+   * @param keyPassword - Contraseña opcional si la clave privada está encriptada
    */
-  loadFromFiles(certPath: string, keyPath: string, keyPassphrase?: string) {
+  loadFromFiles(certPath: string, keyPath: string, keyPassword?: string) {
     this.cert = fs.readFileSync(certPath, 'utf8');
     this.key = fs.readFileSync(keyPath, 'utf8');
     
     // Si la clave está encriptada y se proporciona contraseña,
     // node-forge puede desencriptarla si es necesario
-    if (keyPassphrase) {
+    if (keyPassword) {
       // Implementar desencriptado si la clave privada está protegida
       // const forge = require('node-forge');
-      // const privateKey = forge.pki.decryptRsaPrivateKey(this.key, keyPassphrase);
+      // const privateKey = forge.pki.decryptRsaPrivateKey(this.key, keyPassword);
       // this.key = forge.pki.privateKeyToPem(privateKey);
     }
   }
@@ -148,7 +149,7 @@ class PKCS12 {
   private certPem: string | null = null;
   private keyPem: string | null = null;
 
-  // Métodos existentes para PFX/P12...
+  // Métodos existentes para PFX/P12 (mantienen el nombre 'passphase' del código original)...
   openFile(file: string, passphase: string) {
     this.openCertificate(file);
     this.p12 = forge.pkcs12.pkcs12FromAsn1(this.p12Asn1, false, passphase);
