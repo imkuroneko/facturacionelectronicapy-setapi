@@ -1,5 +1,5 @@
 import JSZip from "jszip";
-import pkcs12 from "./PKCS12";
+import certificateManager from "./PKCS12";
 import xml2js from "xml2js";
 import fs from "fs";
 import { SetApiConfig } from "./type.interface.";
@@ -13,22 +13,14 @@ class SET {
   private key: any;
 
   /**
-   * Crea los certificados para authenticarse a la SET.
-   * @param certificado
-   * @param passphase
-   * /
-  /*auth(env: "test" | "prod", certificado: any, passphase: string) {
-    pkcs12.openFile(certificado, passphase);
-    this.env = env;
-    this.cert = pkcs12.getCertificate();
-    this.key = pkcs12.getPrivateKey();
-  }
-  */
-
-  abrir(certificado: any, passphase: string) {
-    pkcs12.openFile(certificado, passphase);
-    this.cert = pkcs12.getCertificate();
-    this.key = pkcs12.getPrivateKey();
+   * Carga los certificados desde archivos separados para autenticarse a la SET.
+   * @param certPath - Ruta al archivo .crt o .pem del certificado
+   * @param keyPath - Ruta al archivo .key de la clave privada
+   */
+  abrir(certPath: string, keyPath: string) {
+    certificateManager.openFromFiles(certPath, keyPath);
+    this.cert = certificateManager.getCertificate();
+    this.key = certificateManager.getPrivateKey();
   }
 
   /**
@@ -41,8 +33,8 @@ class SET {
     id: number,
     cdc: string,
     env: "test" | "prod",
-    certificado: any,
-    passphase: any,
+    certPath: string,
+    keyPath: string,
     config?: SetApiConfig
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -54,7 +46,7 @@ class SET {
 
         defaultConfig = Object.assign(defaultConfig, config);
 
-        this.abrir(certificado, passphase);
+        this.abrir(certPath, keyPath);
 
         let url = "https://sifen.set.gov.py/de/ws/consultas/consulta.wsdl";
         if (env == "test") {
@@ -167,8 +159,8 @@ class SET {
     id: number,
     numeroProtocolo: number,
     env: "test" | "prod",
-    certificado: any,
-    passphase: any,
+    certPath: string,
+    keyPath: string,
     config?: SetApiConfig
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -180,7 +172,7 @@ class SET {
 
         defaultConfig = Object.assign(defaultConfig, config);
 
-        this.abrir(certificado, passphase);
+        this.abrir(certPath, keyPath);
 
         let url = "https://sifen.set.gov.py/de/ws/consultas/consulta-lote.wsdl";
         if (env == "test") {
@@ -291,8 +283,8 @@ class SET {
     id: number,
     ruc: string,
     env: "test" | "prod",
-    certificado: any,
-    passphase: any,
+    certPath: string,
+    keyPath: string,
     config?: SetApiConfig
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -304,7 +296,7 @@ class SET {
 
         defaultConfig = Object.assign(defaultConfig, config);
 
-        this.abrir(certificado, passphase);
+        this.abrir(certPath, keyPath);
 
         let url = "https://sifen.set.gov.py/de/ws/consultas/consulta-ruc.wsdl";
         if (env == "test") {
@@ -422,8 +414,8 @@ class SET {
     id: number,
     xml: string,
     env: "test" | "prod",
-    certificado: any,
-    passphase: any,
+    certPath: string,
+    keyPath: string,
     config?: SetApiConfig
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -435,7 +427,7 @@ class SET {
 
         defaultConfig = Object.assign(defaultConfig, config);
 
-        this.abrir(certificado, passphase);
+        this.abrir(certPath, keyPath);
 
         let url = "https://sifen.set.gov.py/de/ws/sync/recibe.wsdl";
         if (env == "test") {
@@ -552,8 +544,8 @@ class SET {
     id: number,
     xmls: string[],
     env: "test" | "prod",
-    certificado: any,
-    passphase: any,
+    certPath: string,
+    keyPath: string,
     config?: SetApiConfig
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -565,7 +557,7 @@ class SET {
 
         defaultConfig = Object.assign(defaultConfig, config);
 
-        this.abrir(certificado, passphase);
+        this.abrir(certPath, keyPath);
 
         if (xmls.length == 0) {
           reject(
@@ -718,8 +710,8 @@ class SET {
     id: number,
     xml: string,
     env: "test" | "prod",
-    certificado: any,
-    passphase: any,
+    certPath: string,
+    keyPath: string,
     config?: SetApiConfig
   ): Promise<any> {
     return new Promise(async (resolve, reject) => {
@@ -731,7 +723,7 @@ class SET {
 
         defaultConfig = Object.assign(defaultConfig, config);
 
-        this.abrir(certificado, passphase);
+        this.abrir(certPath, keyPath);
 
         let url = "https://sifen.set.gov.py/de/ws/eventos/evento.wsdl";
         if (env == "test") {
